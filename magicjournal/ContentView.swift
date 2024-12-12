@@ -8,18 +8,33 @@
 import SwiftUI
 import Inject
 
-
 struct ContentView: View {
-@ObserveInjection var inject
+    @ObserveInjection var inject
+    @StateObject private var viewModel = JournalViewModel()
+    @State private var showingNewEntrySheet = false
     
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello  yodddd!")
+        NavigationView {
+            List {
+                ForEach(viewModel.entries) { entry in
+                    NavigationLink(destination: JournalEntryDetailView(entry: entry, viewModel: viewModel)) {
+                        JournalEntryRow(entry: entry)
+                    }
+                }
+                .onDelete(perform: viewModel.deleteEntry)
+            }
+            .navigationTitle("My Journal")
+            .toolbar {
+                Button {
+                    showingNewEntrySheet = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
         }
-        .padding()
+        .sheet(isPresented: $showingNewEntrySheet) {
+            NewJournalEntryView(viewModel: viewModel)
+        }
         .enableInjection()
     }
 }
