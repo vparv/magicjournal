@@ -6,16 +6,21 @@
 //
 
 import SwiftUI
+import Inject
+
 
 struct ContentView: View {
+@ObserveInjection var inject
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
-            Text("Hello world!")
+            Text("Hello  yodddd!")
         }
         .padding()
+        .enableInjection()
     }
 }
 
